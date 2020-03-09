@@ -61,3 +61,9 @@ a small bootstrap script will intialise an adhoc service container where you can
 
 ### Frontend 
 Is simple HTML no graphics/css elements and it is missing CSRF or similar for duplicate submit control. No template framerowks/packages used. simple one page in-line implementation.
+
+### Reason for docker setup
+Basically easy install for development and possibility to use same docker container setup for deployment.
+Solution is using separate PHP and HTTP servers so that you can test solutions using different versions of PHP using PHP FPM service instead of having PHP client called for each script run (no init time).
+On production you can easily add more PHP servers on a load balancer while still using one web server to handle the load.
+
