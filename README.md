@@ -42,21 +42,22 @@ To test the app, which is very sparse go to localhost port 80.
 By default a form with 3 fields will show. if you enter username smaller than 3 or bigger than 10 characters error will be triggered.
 If you enter invalid email address error will be triggered.
 
-####No framework rule
+###No framework rule
 No frameworks apart from phpunit testing framework were used.
 
-####Validation
+###Validation
 Simplified Domain design was used, where domain validation is delegated to a specific domain so the whole logic related to a domain is contained within domain object.
 
-####Models
+###Models
 Models are related to database entities and use domains classes for field definitions. For the purpose of grouping error handling, 
 validation on model level always provides information about errors related to a specific field.
 
-####Forms
+###Forms
 Forms wastly in this simple example wrap around the model, but are there to later on enable complcated multi model scenarios.
 
 ### bootstrap
 
 a small bootstrap script will intialise an adhoc service container where you can map different database and email providers.
 
-
+### Frontend 
+Is simple HTML no graphics/css elements and it is missing CSRF or similar for duplicate submit control. No template framerowks/packages used. simple one page in-line implementation.

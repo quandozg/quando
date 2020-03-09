@@ -25,7 +25,9 @@ if (isset($_POST['submit'])) {
     $errors = $form->getErrors();
 }
 ?>
-<div>
+    <h1>Send to a friend<h1>
+    <p>Share this great deal with friends</p>
+    <p>
     <form method="POST" id="subscriptionForm">
         <label for="firstName">First<?php
             echo $form->isRequiredField('firstName') ? '*' : '' ?>: </label>
@@ -41,7 +43,9 @@ if (isset($_POST['submit'])) {
         <?php echo implode(' ', $errors['email'] ?? []); ?><br/>
         <input type="submit" name="submit">
     </form>
+</p>
 </div>
+</body>
 </html>
 <?php
 function sendEmail(array $services, AbstractForm $form)
