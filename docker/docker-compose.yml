@@ -1,0 +1,64 @@
+version: "3.5"
+services: 
+  apache:
+    working_dir: /usr/local/apache2/
+    container_name: ${PROJECT_NAME}-apache-server
+    build:
+      context: ./docker/apache
+    volumes:
+      - ../public_html/:/usr/local/apache2/htdocs/
+      - ../:/usr/local/apache2/code/
+      - ./docker/apache/configs/vhttpd.conf:/usr/local/apache2/conf/vhttpd.conf
+    environment:
+      APACHE_ROOT_DIR: ${APACHE_ROOT_DIR}
+      APACHE_ROOT_DIR_PUBLIC: ${APACHE_ROOT_DIR_PUBLIC}
+    networks:
+      public_net2:
+        ipv4_address: ${APACHE_IP}
+    ports:
+      - ${APACHE_HOST_EXPOSED_PORT}:${APACHE_SERVER_EXPOSED_PORT}
+    restart: always
+  php:
+    container_name: ${PROJECT_NAME}-php-server
+    working_dir: /usr/local/apache2/
+
+    build:
+      context: ./docker/php 
+    volumes:
+      - ../public_html/:/usr/local/apache2/htdocs/
+      - ../:/usr/local/apache2/code/
+    environment:
+      PHP_ROOT_DIR: ${PHP_ROOT_DIR}
+      WEB_USER: ${WEB_USER}
+      WEB_GROUP: ${WEB_GROUP}
+      MYSQL_IP: ${MYSQL_IP}
+      MYSQL_APACHE_USER: ${MYSQL_APACHE_USER}
+      MYSQL_APACHE_PASSWORD: ${MYSQL_APACHE_PASSWORD}
+    networks:
+      public_net2:
+        ipv4_address: ${PHP_IP}
+    ports:
+      - ${PHP_HOST_EXPOSED_PORT}:${PHP_SERVER_EXPOSED_PORT}
+    restart: always
+  mysql:
+    container_name: ${PROJECT_NAME}-mysql-server
+    build:
+      context: ./docker/mysql
+    volumes:
+      - ./mysql/conf/:/etc/mysql/conf.d/
+      - ./initdb/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    networks:
+      public_net2:
+        ipv4_address: ${MYSQL_IP}
+    ports:
+      - ${MYSQL_HOST_EXPOSED_PORT}:${MYSQL_SERVER_EXPOSED_PORT}
+    restart: always
+networks:
+    public_net2:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${NETWORK_SUBNET}
